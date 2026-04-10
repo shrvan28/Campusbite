@@ -1,0 +1,136 @@
+.profile-section {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+    background: linear-gradient(135deg, #00b894, #0984e3);
+    padding: 40px 20px;
+    text-align: center;
+    color: white;
+}
+
+.avatar {
+    font-size: 60px;
+    background: rgba(255,255,255,0.2);
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+}
+
+.profile-header h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.role-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.profile-details {
+    padding: 40px;
+}
+
+.detail-group {
+    margin-bottom: 25px;
+}
+
+.detail-group label {
+    display: block;
+    color: #636e72;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.detail-group p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3436;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.action-btn.primary {
+    background: #00b894;
+    color: white;
+}
+
+.action-btn.primary:hover {
+    background: #019874;
+}
+
+.action-btn.secondary {
+    background: #f1f2f6;
+    color: #2d3436;
+}
+
+.action-btn.secondary:hover {
+    background: #dfe6e9;
+}
+
+@media(max-width:480px) {
+    .profile-section {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    .profile-header {
+        padding: 30px 15px;
+    }
+
+    .profile-header h2 {
+        font-size: 24px;
+    }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 50px;
+    }
+
+    .profile-details {
+        padding: 25px 20px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+}

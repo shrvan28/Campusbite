@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add Menu Item | CampusBite Admin</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/admin.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* Base form styling for the add item page */
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #ff4757;
+}
+
+.btn-submit {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background: #ff3344;
+}
+
+.flash-messages {
+    margin-bottom: 1rem;
+}
+
+.alert {
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.alert-success { background: #d4edda; color: #155724; }
+.alert-error { background: #f8d7da; color: #721c24; }
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- Sidebar -->
+<div class="sidebar">
+<a href="/" style="text-decoration:none;"><h2 class="logo">Campus<span>Bite</span></h2></a>
+<ul>
+<li><a href="/admin">Dashboard</a></li>
+<li><a href="/admin/analytics">Analytics</a></li>
+<li><a href="/admin/add-item" style="color: #ff4757; font-weight:600;">Add Item</a></li>
+<li><a href="/admin/manage-items">Manage Menu</a></li>
+<li><a href="/profile">My Profile</a></li>
+<li><a href="/logout">Logout</a></li>
+</ul>
+</div>
+
+
+<!-- Main Content -->
+<div class="admin-main">
+
+<h1 class="admin-title">Add New Menu Item</h1>
+
+<div class="form-container">
+    
+    <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/admin/add-item">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" name="name" placeholder="E.g., Samosa" required>
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="breakfast">Breakfast & Snacks</option>
+                <option value="tea">Tea & Coffee</option>
+                <option value="drinks">Cold Drinks</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Price (₹)</label>
+            <input type="number" name="price" placeholder="E.g., 20" required min="1">
+        </div>
+
+        <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" name="image_url" placeholder="https://example.com/image.jpg" required>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+            <label style="margin-bottom: 0;">Is Available?</label>
+            <label class="switch">
+                <input type="checkbox" name="is_available" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Add Item to Menu</button>
+        
+    </form>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

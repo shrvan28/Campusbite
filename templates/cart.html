@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cart | CampusBite</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/cart.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HIDDEN CHECKBOX FOR MODAL -->
+<input type="checkbox" id="modal-toggle">
+
+
+<!-- NAVBAR -->
+
+<nav>
+<div class="nav-container">
+
+<a href="/" class="logo">Campus<span>Bite</span></a>
+
+<!-- Mobile Menu Toggle -->
+<input type="checkbox" id="nav-toggle" class="nav-toggle">
+<label for="nav-toggle" class="nav-icon">
+    <span></span>
+</label>
+
+<div class="nav-menu">
+<a href="/">Menu</a>
+<a href="/orders">My Orders</a>
+{% if user and user.role == 'admin' %}
+<a href="/admin" style="background:#ff4757; color:white; padding:4px 10px; border-radius:6px; font-weight:600;">Admin Panel</a>
+{% endif %}
+</div>
+
+<div class="nav-right">
+{% if user %}
+<a href="/logout" class="btn-login">Logout</a>
+<a href="/profile" class="profile">👤 {{ user.name }}</a>
+{% else %}
+<a href="/login" class="btn-login">Login</a>
+<a href="/register" class="btn-register">Register</a>
+{% endif %}
+<a href="/cart" class="cart" style="text-decoration:none;">🛒</a>
+</div>
+
+</div>
+</nav>
+
+
+<!-- CART SECTION -->
+
+<section class="cart-section">
+
+<h2>Your Order</h2>
+
+<div class="cart-container">
+
+<!-- CART ITEMS -->
+
+<div class="cart-items">
+
+{% if not items %}
+<div style="text-align:center; padding: 40px 0;">
+    <p style="margin-bottom: 20px; font-size: 18px; color: #636e72;">Your cart is empty.</p>
+    <a href="/" class="checkout-btn" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 30px;">Start Ordering</a>
+</div>
+{% else %}
+{% for item in items %}
+<div class="cart-item">
+<img src="{{ item.image_url }}">
+<div class="item-details">
+<h3>{{ item.name }}</h3>
+<p>₹{{ item.price }}</p>
+</div>
+<div class="quantity">
+    <a href="/update_cart/{{ item.id }}/minus" class="qty-btn">-</a>
+    <span>{{ item.quantity }}</span>
+    <a href="/update_cart/{{ item.id }}/plus" class="qty-btn">+</a>
+</div>
+<a href="/update_cart/{{ item.id }}/remove" class="remove-btn">🗑️</a>
+</div>
+{% endfor %}
+{% endif %}
+
+</div>
+
+<!-- ORDER SUMMARY -->
+
+<div class="order-summary">
+
+<h3>Order Summary</h3>
+
+<div class="summary-row">
+<span>Total</span>
+<span>₹{{ total }}</span>
+</div>
+
+{% if items %}
+<label for="modal-toggle" class="checkout-btn" style="display:block; text-align:center;">Proceed to Payment</label>
+<a href="/clear_cart" style="display:block; text-align:center; margin-top:10px; color:red; text-decoration:none;">Clear Cart</a>
+{% endif %}
+
+</div>
+
+</div>
+
+</section>
+
+<!-- SCHEDULE TIME MODAL -->
+<div class="modal-overlay">
+    <div class="modal-card">
+        <form method="GET" action="/payment" id="checkout-form">
+
+            <h3>Checkout</h3>
+            <p>Choose how you'd like to pay for your order.</p>
+
+            <!-- STEP 1: PAYMENT METHOD -->
+            <div class="modal-payment-options">
+
+                <label class="modal-pay-option" id="label-upi">
+                    <input type="radio" name="payment" value="upi" id="pay-upi" onchange="handlePaymentChange()" required>
+                    <span class="pay-icon">📱</span>
+                    <div>
+                        <strong>UPI / Online</strong>
+                        <small>Google Pay, PhonePe, Paytm</small>
+                    </div>
+                </label>
+
+                <label class="modal-pay-option" id="label-cod">
+                    <input type="radio" name="payment" value="cod" id="pay-cod" onchange="handlePaymentChange()">
+                    <span class="pay-icon">💵</span>
+                    <div>
+                        <strong>Cash on Delivery</strong>
+                        <small>Pay when you pick up</small>
+                    </div>
+                </label>
+
+            </div>
+
+            <!-- STEP 2: SCHEDULE TIME (UPI only) -->
+            <div class="time-input-group" id="schedule-section" style="display:none;">
+                <label for="order-time">⏰ Schedule Pickup Time <small style="color:#00b894;">(UPI only)</small></label>
+                <input type="time" id="order-time" name="order-time" step="600" value="12:00" class="time-input">
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn confirm-order-btn">Confirm & Pay</button>
+                <label for="modal-toggle" class="btn cancel-modal-btn">Cancel</label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function handlePaymentChange() {
+    var upi = document.getElementById('pay-upi');
+    var cod = document.getElementById('pay-cod');
+    var scheduleSection = document.getElementById('schedule-section');
+    var timeInput = document.getElementById('order-time');
+    var labelUpi = document.getElementById('label-upi');
+    var labelCod = document.getElementById('label-cod');
+
+    if (upi.checked) {
+        scheduleSection.style.display = 'block';
+        timeInput.required = true;
+        labelUpi.classList.add('selected');
+        labelCod.classList.remove('selected');
+    } else if (cod.checked) {
+        scheduleSection.style.display = 'none';
+        timeInput.required = false;
+        timeInput.value = '';
+        labelCod.classList.add('selected');
+        labelUpi.classList.remove('selected');
+    }
+}
+</script>
+
+</body>
+</html>

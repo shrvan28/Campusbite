@@ -1,0 +1,134 @@
+.payment-section {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.payment-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.payment-card h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.payment-card .subtitle {
+    color: #636e72;
+    margin-bottom: 30px;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 18px;
+    border: 2px solid #f1f2f6;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    text-align: left;
+}
+
+.payment-option:hover {
+    border-color: #00b894;
+    background: #f9fffb;
+}
+
+.payment-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-option i {
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.option-info h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.option-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #636e72;
+}
+
+
+/* CSS-only "Selected" state */
+.payment-option:has(input:checked) {
+    border-color: #00b894;
+    background: #f9fffb;
+    box-shadow: 0 4px 15px rgba(0,184,148,0.1);
+}
+
+.order-total-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-total-box span {
+    color: #636e72;
+}
+
+.order-total-box h3 {
+    margin: 0;
+    color: #2d3436;
+    font-size: 24px;
+}
+
+.pay-btn {
+    width: 100%;
+    padding: 16px;
+    background: #1e272e;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pay-btn:hover {
+    background: #00b894;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,184,148,0.2);
+}
+
+@media(max-width:480px) {
+    .payment-section {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+    
+    .payment-card {
+        padding: 25px 15px;
+    }
+
+    .payment-card h2 {
+        font-size: 20px;
+    }
+    
+    .order-total-box h3 {
+        font-size: 20px;
+    }
+}

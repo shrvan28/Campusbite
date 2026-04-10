@@ -1,0 +1,647 @@
+/* ================================
+   GLOBAL
+================================ */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Outfit', sans-serif;
+}
+
+
+body{
+background:#f5f7fb;
+color:#2d3436;
+line-height:1.6;
+}
+
+/* FLASH MESSAGES GLOBAL */
+.flash-messages {
+    max-width: 1100px;
+    margin: 1.5rem auto;
+    padding: 0 20px;
+}
+
+.flash {
+    padding: 14px 22px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.flash.success {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.flash.error {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.flash.info {
+    background: #e2e3e5;
+    color: #383d41;
+    border-color: #d6d8db;
+}
+
+/* ================================
+   NAVBAR
+================================ */
+
+nav{
+background:rgba(30,39,46,0.95);
+backdrop-filter:blur(8px);
+padding:14px 6%;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container{
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:white;
+text-decoration:none;
+}
+
+.logo span{
+color:#00d084;
+}
+
+.nav-menu a{
+margin:0 15px;
+color:#dfe6e9;
+text-decoration:none;
+font-size:15px;
+transition:0.3s;
+}
+
+.nav-menu a:hover{
+color:white;
+}
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+/* LOGIN BUTTON */
+
+.btn-login{
+padding:7px 16px;
+border-radius:8px;
+text-decoration:none;
+font-weight:600;
+border:2px solid #00b894;
+color:#00b894;
+transition:0.3s;
+}
+
+.btn-login:hover{
+background:#00b894;
+color:white;
+}
+
+/* HAMBURGER MENU LOGIC */
+
+.nav-toggle {
+    display: none;
+}
+
+.nav-icon {
+    display: none;
+    cursor: pointer;
+    padding: 10px 5px;
+    z-index: 1001;
+}
+
+.nav-icon span,
+.nav-icon span::before,
+.nav-icon span::after {
+    display: block;
+    background: white;
+    height: 2px;
+    width: 25px;
+    position: relative;
+    transition: background 0.2s ease-out;
+}
+
+.nav-icon span::before,
+.nav-icon span::after {
+    content: "";
+    position: absolute;
+    transition: all 0.2s ease-out;
+}
+
+.nav-icon span::before {
+    top: 7px;
+}
+
+.nav-icon span::after {
+    top: -7px;
+}
+
+/* REGISTER BUTTON */
+
+.btn-register{
+background:#00b894;
+color:white;
+padding:7px 16px;
+border-radius:8px;
+text-decoration:none;
+font-weight:600;
+transition:0.3s;
+}
+
+.btn-register:hover{
+background:#019874;
+}
+
+/* CART */
+
+.cart{
+font-size:20px;
+cursor:pointer;
+color:white;
+}
+
+/* PROFILE NAME ONLY */
+
+.profile{
+color:white;
+text-decoration:none;
+font-weight:600;
+padding:6px 12px;
+border-radius:8px;
+transition:0.3s;
+}
+
+.profile:hover{
+background:rgba(255,255,255,0.1);
+}
+
+/* ================================
+   HERO SECTION
+================================ */
+
+.hero{
+height:320px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:linear-gradient(135deg,#00b894,#0984e3);
+color:white;
+padding:20px;
+}
+
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.hero h1 span{
+color:#ffeaa7;
+}
+
+.hero p{
+max-width:520px;
+margin:auto;
+margin-bottom:20px;
+}
+
+.hero-btn{
+background:white;
+color:#0984e3;
+border:none;
+padding:12px 28px;
+border-radius:25px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+.hero-btn:hover{
+transform:scale(1.05);
+}
+
+/* SEARCH BAR */
+
+.search-container{
+max-width:450px;
+margin:0 auto 25px;
+background:white;
+padding:6px;
+border-radius:30px;
+display:flex;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.search-container form{
+display:flex;
+width:100%;
+}
+
+.search-container input{
+flex:1;
+border:none;
+padding:10px 20px;
+font-size:16px;
+outline:none;
+border-radius:30px 0 0 30px;
+}
+
+.search-container button{
+background:#00b894;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:30px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.search-container button:hover{
+background:#019874;
+}
+
+/* ================================
+   MENU SECTION
+================================ */
+
+.menu-section{
+max-width:1200px;
+margin:auto;
+padding:50px 20px;
+}
+
+input[type="radio"]{
+display:none;
+}
+
+/* MENU TABS */
+
+.tabs{
+display:flex;
+justify-content:center;
+gap:15px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.tabs label{
+background:white;
+padding:10px 20px;
+border-radius:25px;
+cursor:pointer;
+font-weight:600;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.tabs label:hover{
+transform:translateY(-2px);
+}
+
+#breakfast:checked ~ .tabs label[for="breakfast"],
+#tea:checked ~ .tabs label[for="tea"],
+#drinks:checked ~ .tabs label[for="drinks"]{
+background:#00b894;
+color:white;
+}
+
+/* ================================
+   MENU GRID
+================================ */
+
+.menu-grid{
+display:none;
+grid-template-columns:repeat(auto-fit,minmax(180px,220px));
+gap:25px;
+padding:20px;
+justify-content:center;
+}
+
+#breakfast:checked ~ .menu-content .breakfast{
+display:grid;
+}
+
+#tea:checked ~ .menu-content .tea{
+display:grid;
+}
+
+#drinks:checked ~ .menu-content .drinks{
+display:grid;
+}
+
+/* ================================
+   FOOD CARD
+================================ */
+
+.card{
+background:white;
+border-radius:18px;
+padding:12px;
+text-align:center;
+box-shadow:0 8px 20px rgba(0,0,0,0.07);
+transition:0.3s;
+max-width:210px;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 14px 30px rgba(0,0,0,0.12);
+}
+
+.card img{
+width:100%;
+height:130px;
+object-fit:cover;
+border-radius:12px;
+margin-bottom:8px;
+transition:0.3s;
+}
+
+.card:hover img{
+transform:scale(1.05);
+}
+
+.card h3{
+font-size:16px;
+margin-bottom:5px;
+}
+
+.price{
+color:#00b894;
+font-weight:700;
+margin-bottom:8px;
+}
+
+/* ORDER BUTTON */
+
+.card button{
+width:100%;
+background:#1e272e;
+color:white;
+border:none;
+padding:8px;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+font-size:13px;
+transition:0.3s;
+}
+
+.card button:hover{
+background:#00b894;
+}
+
+/* ================================
+   RESPONSIVE DESIGN (MOBILE)
+   ================================ */
+
+@media(max-width:768px){
+
+    .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 5px 0;
+    }
+
+    .nav-icon {
+        display: block;
+    }
+
+    .nav-menu {
+        position: fixed;
+        background: #1e272e;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        transition: all 0.3s ease-in-out;
+        z-index: 1000;
+        padding: 0;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        margin: 0;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .nav-right {
+        gap: 10px;
+    }
+
+    .btn-login, .btn-register {
+        padding: 5px 10px;
+        font-size: 13px;
+    }
+
+    /* TOGGLE LOGIC */
+    .nav-toggle:checked ~ .nav-menu {
+        height: auto;
+        padding: 10px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .nav-toggle:checked ~ .nav-menu a {
+        opacity: 1;
+    }
+
+    .nav-toggle:checked ~ .nav-icon span {
+        background: transparent;
+    }
+
+    .nav-toggle:checked ~ .nav-icon span::before {
+        transform: rotate(-45deg);
+        top: 0;
+    }
+
+    .nav-toggle:checked ~ .nav-icon span::after {
+        transform: rotate(45deg);
+        top: 0;
+    }
+
+    .hero {
+        height: auto;
+        padding: 80px 20px;
+        background: linear-gradient(135deg,#00b894,#0984e3);
+    }
+
+    .hero h1 {
+        font-size: clamp(28px, 8vw, 42px);
+    }
+
+    .hero p {
+        font-size: 15px;
+        margin-bottom: 25px;
+    }
+
+    .menu-section {
+        padding: 30px 10px;
+    }
+
+    .menu-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 12px;
+    }
+
+    .card img {
+        height: 100px;
+    }
+
+    .card h3 {
+        font-size: 13px;
+    }
+}
+
+.card.sold-out {
+    position: relative;
+    opacity: 0.9;
+    background: #f8f9fa;
+}
+
+.card.sold-out::after {
+    content: "SOLD OUT";
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    background: rgba(231, 76, 60, 0.9);
+    color: white;
+    padding: 3px 10px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 1px solid white;
+}
+
+.card.sold-out img {
+    filter: grayscale(1) opacity(0.6);
+}
+
+.card.sold-out h3, .card.sold-out .price {
+    opacity: 0.5;
+}
+
+.btn-sold-out {
+    background: #bdc3c7 !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    width: 100%;
+    border: none !important;
+    padding: 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    }
+
+/* ================================
+   FOOTER
+================================ */
+
+footer {
+    background: #1e272e;
+    color: #dfe6e9;
+    padding: 60px 20px 30px;
+    margin-top: 50px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 25px;
+}
+
+.footer-logo span {
+    color: #00d084;
+}
+
+.footer-info {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: #b2bec3;
+    transition: 0.3s;
+}
+
+.footer-info-item:hover {
+    color: #00d084;
+}
+
+.footer-info-item i {
+    font-size: 18px;
+}
+
+.footer-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 30px 0;
+}
+
+.footer-bottom {
+    font-size: 14px;
+    color: #636e72;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .footer-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+

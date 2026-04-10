@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CampusBite | Smart Canteen</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+<div class="nav-container">
+
+<a href="/" class="logo">Campus<span>Bite</span></a>
+
+<!-- Mobile Menu Toggle -->
+<input type="checkbox" id="nav-toggle" class="nav-toggle">
+<label for="nav-toggle" class="nav-icon">
+    <span></span>
+</label>
+
+{% if user %}
+<div class="nav-menu">
+    <a href="/">Menu</a>
+    <a href="/orders">My Orders</a>
+    {% if user.role == 'admin' %}
+    <a href="/admin" style="background:#ff4757; color:white; padding:4px 10px; border-radius:6px; font-weight:600;">Admin Panel</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="nav-right">
+
+{% if user %}
+<a href="/logout" class="btn-login">Logout</a>
+<a href="/profile" class="profile">👤 {{ user.name }}</a>
+{% else %}
+<a href="/login" class="btn-login">Login</a>
+<a href="/register" class="btn-register">Register</a>
+{% endif %}
+
+<a href="/cart" class="cart" style="text-decoration:none;">🛒 {% if cart_count > 0 %} <span style="background:red; color:white; border-radius:50%; padding:2px 6px; font-size:12px;">{{ cart_count }}</span> {% endif %}</a>
+
+</div>
+
+
+
+</div>
+</nav>
+
+<!-- HERO SECTION -->
+
+<header class="hero">
+
+<div class="hero-text">
+
+<h1>Fresh Food <span>Without Waiting</span></h1>
+
+<p>Order from your college canteen in seconds and skip the queue.</p>
+
+<div class="search-container">
+    <form action="/" method="GET">
+        <input type="text" name="q" placeholder="Search for food..." value="{{ search_query }}">
+        <button type="submit">🔍</button>
+    </form>
+</div>
+
+<a href="#menu-scroll"><button class="hero-btn">Explore Menu</button></a>
+
+</div>
+
+</header>
+
+
+
+<!-- MENU SECTION -->
+
+<section class="menu-section" id="menu-scroll">
+
+<input type="radio" id="breakfast" name="tabs" checked>
+<input type="radio" id="tea" name="tabs">
+<input type="radio" id="drinks" name="tabs">
+
+
+<div class="tabs">
+
+<label for="breakfast">🥞 Breakfast</label>
+<label for="tea">☕ Tea & Coffee</label>
+<label for="drinks">🥤 Cold Drinks</label>
+
+</div>
+
+
+
+<div class="menu-content">
+
+<!-- BREAKFAST -->
+
+<div class="menu-grid breakfast">
+
+{% for item in breakfast %}
+<div class="card {% if not item.is_available %}sold-out{% endif %}">
+<img src="{{ item.image_url }}">
+<h3>{{ item.name }}</h3>
+<p class="price">₹{{ item.price }}</p>
+{% if item.is_available %}
+<a href="/add_to_cart/{{ item.id }}"><button>Add to Order</button></a>
+{% else %}
+<button class="btn-sold-out" disabled>Sold Out</button>
+{% endif %}
+</div>
+{% endfor %}
+
+</div>
+
+
+<!-- TEA -->
+
+<div class="menu-grid tea">
+
+{% for item in tea %}
+<div class="card {% if not item.is_available %}sold-out{% endif %}">
+<img src="{{ item.image_url }}">
+<h3>{{ item.name }}</h3>
+<p class="price">₹{{ item.price }}</p>
+{% if item.is_available %}
+<a href="/add_to_cart/{{ item.id }}"><button>Add to Order</button></a>
+{% else %}
+<button class="btn-sold-out" disabled>Sold Out</button>
+{% endif %}
+</div>
+{% endfor %}
+
+</div>
+
+
+<!-- DRINKS -->
+
+<div class="menu-grid drinks">
+
+{% for item in drinks %}
+<div class="card {% if not item.is_available %}sold-out{% endif %}">
+<img src="{{ item.image_url }}">
+<h3>{{ item.name }}</h3>
+<p class="price">₹{{ item.price }}</p>
+{% if item.is_available %}
+<a href="/add_to_cart/{{ item.id }}"><button>Add to Order</button></a>
+{% else %}
+<button class="btn-sold-out" disabled>Sold Out</button>
+{% endif %}
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-container">
+        <a href="/" class="footer-logo">Campus<span>Bite</span></a>
+        
+        <div class="footer-info">
+            <div class="footer-info-item">
+                <span>📧 admin@campusbite.com</span>
+            </div>
+            <div class="footer-info-item">
+                <span>📞 +91 98765 43210</span>
+            </div>
+            <div class="footer-info-item">
+                <span>📍 Campus Canteen, Block A</span>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 CampusBite. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+```

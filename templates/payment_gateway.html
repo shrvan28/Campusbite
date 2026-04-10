@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Payment...</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00b894;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="loader"></div>
+        <h2>Securely redirecting to Razorpay...</h2>
+        <p>Please do not refresh the page or click back.</p>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            "key": "{{ rzp_key_id }}",
+            "amount": "{{ order.total_amount * 100 }}",
+            "currency": "INR",
+            "name": "CampusBite",
+            "description": "Order #{{ order.id }}",
+            "image": "https://img.icons8.com/plasticine/100/food.png",
+            "order_id": "{{ rzp_order_id }}",
+            "handler": function (response){
+                // Success: Verify payment on server
+                fetch('/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        window.location.href = "/order_success?order_id=" + data.order_id;
+                    } else {
+                        alert("Payment verification failed: " + (data.error || "Unknown error"));
+                        window.location.href = "/payment";
+                    }
+                })
+                .catch(err => {
+                    console.error("Verification error:", err);
+                    alert("An error occurred while verifying the payment.");
+                    window.location.href = "/payment";
+                });
+            },
+            "prefill": {
+                "name": "{{ user.name }}",
+                "email": "{{ user.email }}"
+            },
+            "theme": {
+                "color": "#00b894"
+            },
+            "modal": {
+                "ondismiss": function(){
+                    window.location.href = "/payment";
+                }
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+            console.error("Payment failed:", response.error);
+            alert("Payment failed: " + response.error.description);
+            window.location.href = "/payment";
+        });
+        window.onload = function() {
+            rzp1.open();
+        };
+    </script>
+</body>
+</html>

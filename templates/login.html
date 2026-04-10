@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | CampusBite</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/auth.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="auth-page">
+
+<div class="auth-wrapper">
+
+<div class="auth-card">
+
+<!-- Display Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="auth-header">
+
+<a href="/" class="logo">Campus<span>Bite</span></a>
+
+<h2>Welcome Back 👋</h2>
+
+<p>Login to your account to order food quickly</p>
+
+</div>
+
+
+<form class="auth-form" method="POST" action="/login">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+<div class="input-group">
+
+<label>Email</label>
+<input type="email" name="email" placeholder="Enter your email" required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Password</label>
+<input type="password" name="password" placeholder="Enter password" required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Select Role</label>
+
+<select name="role" required>
+
+<option value="">Choose role</option>
+<option value="user">Student / Staff</option>
+<option value="admin">Canteen Admin</option>
+
+</select>
+
+</div>
+
+
+<button class="btn-auth">Login</button>
+
+</form>
+
+
+<div class="auth-footer">
+
+<p>Don't have an account?</p>
+
+<a href="/register">Create Account</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
+```

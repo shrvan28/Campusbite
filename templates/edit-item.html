@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Menu Item | CampusBite Admin</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/admin.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #ff4757;
+}
+
+.btn-submit {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background: #ff3344;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- Sidebar -->
+<div class="sidebar">
+<a href="/" style="text-decoration:none;"><h2 class="logo">Campus<span>Bite</span></h2></a>
+<ul>
+<li><a href="/admin">Dashboard</a></li>
+<li><a href="/admin/analytics">Analytics</a></li>
+<li><a href="/admin/add-item">Add Item</a></li>
+<li><a href="/admin/manage-items">Manage Menu</a></li>
+<li><a href="/profile">My Profile</a></li>
+<li><a href="/logout">Logout</a></li>
+</ul>
+</div>
+
+
+<!-- Main Content -->
+<div class="admin-main">
+
+<h1 class="admin-title">Edit Menu Item</h1>
+
+<div class="form-container">
+    
+    <form method="POST" action="/admin/edit-item/{{ item.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" name="name" value="{{ item.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select name="category" required>
+                <option value="breakfast" {{ 'selected' if item.category == 'breakfast' }}>Breakfast & Snacks</option>
+                <option value="tea" {{ 'selected' if item.category == 'tea' }}>Tea & Coffee</option>
+                <option value="drinks" {{ 'selected' if item.category == 'drinks' }}>Cold Drinks</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Price (₹)</label>
+            <input type="number" name="price" value="{{ item.price }}" required min="1">
+        </div>
+
+        <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" name="image_url" value="{{ item.image_url }}" required>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 15px;">
+            <label style="margin-bottom: 0;">Is Available?</label>
+            <label class="switch">
+                <input type="checkbox" name="is_available" {{ 'checked' if item.is_available or item.is_available is none }}>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Save Changes</button>
+        <a href="/admin/manage-items" style="display:block; text-align:center; margin-top:1rem; color:#666; text-decoration:none;">Cancel</a>
+        
+    </form>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

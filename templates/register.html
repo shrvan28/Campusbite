@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register | CampusBite</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/auth.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="auth-page">
+
+<div class="auth-wrapper">
+
+<div class="auth-card">
+
+<!-- Display Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="auth-header">
+
+<a href="/" class="logo">Campus<span>Bite</span></a>
+
+<h2>Create Account ✨</h2>
+
+<p>Join CampusBite and order food easily</p>
+
+</div>
+
+
+<form class="auth-form" method="POST" action="/register">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+<div class="input-group">
+
+<label>Full Name</label>
+<input type="text" name="name" placeholder="Enter your name" required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Email</label>
+<input type="email" name="email" placeholder="Enter your email" required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Password</label>
+<input type="password" name="password" placeholder="Create password" required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Confirm Password</label>
+<input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Select Role</label>
+
+<select name="role" required>
+
+<option value="">Choose role</option>
+<option value="user">Student / Staff</option>
+<option value="admin">Canteen Admin</option>
+
+</select>
+
+</div>
+
+
+<button class="btn-auth">Register</button>
+
+</form>
+
+
+<div class="auth-footer">
+
+<p>Already have an account?</p>
+
+<a href="/login">Login Here</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
+```

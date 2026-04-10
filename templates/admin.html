@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard | CampusBite</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/admin.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- Mobile Sidebar Toggle -->
+<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
+<label for="sidebar-toggle" class="sidebar-btn">
+    <span>≡</span>
+</label>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<a href="/" style="text-decoration:none;"><h2 class="logo">Campus<span>Bite</span></h2></a>
+
+<ul>
+
+<li><a href="/admin">Dashboard</a></li>
+<li><a href="/admin/analytics">Analytics</a></li>
+
+<li><a href="/admin/add-item">Add Item</a></li>
+
+<li><a href="/admin/manage-items">Manage Menu</a></li>
+
+<li><a href="/admin">View Orders</a></li>
+<li><a href="/profile">My Profile</a></li>
+<li><a href="/logout">Logout</a></li>
+
+</ul>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="admin-main">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<h1 class="admin-title">Admin Dashboard</h1>
+
+
+<!-- Dashboard Stats -->
+
+<div class="dashboard-cards">
+
+<div class="dash-card">
+<h3>Total Orders</h3>
+<p>{{ total_orders }}</p>
+</div>
+
+<div class="dash-card">
+<h3>Total Items</h3>
+<p>{{ total_items }}</p>
+</div>
+
+<div class="dash-card">
+<h3>Active Orders</h3>
+<p>{{ active_orders }}</p>
+</div>
+
+</div>
+
+
+<!-- Orders Table -->
+
+<h2 class="section-title">Recent Orders</h2>
+
+<div class="table-responsive">
+
+<table class="admin-table">
+
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Items</th>
+<th>Total</th>
+<th>Payment</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for order in orders %}
+<tr>
+<td>#{{ order.id }}</td>
+<td>{{ order.customer.name }}</td>
+<td>
+    {% for oi in order.items %}
+        {{ oi.menu_item.name }} (x{{ oi.quantity }}){% if not loop.last %}, {% endif %}
+    {% endfor %}
+</td>
+<td>₹{{ order.total_amount }}</td>
+<td>
+    {{ order.payment_method.upper() if order.payment_method else 'N/A' }}
+    {% if order.schedule_time %}
+    <br><small style="color: #636e72;">(Sched: {{ order.schedule_time }})</small>
+    {% endif %}
+</td>
+<td>{{ order.status }}</td>
+<td>
+
+    {% if order.status == 'Pending' %}
+    <a href="/admin/update_order_status/{{ order.id }}"><button class="status-btn preparing">Start Preparing</button></a>
+    <a href="/cancel_order/{{ order.id }}" onclick="return confirm('Cancel this order?')"><button class="status-btn cancel">Cancel</button></a>
+    {% elif order.status == 'Preparing' %}
+    <a href="/admin/update_order_status/{{ order.id }}"><button class="status-btn">Mark Complete</button></a>
+    <a href="/cancel_order/{{ order.id }}" onclick="return confirm('Cancel this order?')"><button class="status-btn cancel">Cancel</button></a>
+    {% elif order.status == 'Cancelled' %}
+    <button class="status-btn cancelled" disabled>Cancelled</button>
+    {% else %}
+    <button class="status-btn done" disabled>Completed</button>
+    {% endif %}
+</td>
+</tr>
+{% else %}
+<tr><td colspan="7" style="text-align:center;">No orders found.</td></tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

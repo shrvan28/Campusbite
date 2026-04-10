@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Menu | CampusBite Admin</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #ff3344;
+        }
+
+        .admin-table img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-available {
+            color: #2ecc71;
+        }
+
+        .status-sold-out {
+            color: #e74c3c;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- Mobile Sidebar Toggle -->
+        <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
+        <label for="sidebar-toggle" class="sidebar-btn">
+            <span>≡</span>
+        </label>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="/" style="text-decoration:none;">
+                <h2 class="logo">Campus<span>Bite</span></h2>
+            </a>
+            <ul>
+                <li><a href="/admin">Dashboard</a></li>
+                <li><a href="/admin/analytics">Analytics</a></li>
+                <li><a href="/admin/add-item">Add Item</a></li>
+                <li><a href="/admin/manage-items" style="color: #ff4757; font-weight:600;">Manage Menu</a></li>
+                <li><a href="/profile">My Profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+
+
+        <!-- Main Content -->
+        <div class="admin-main">
+
+            <h1 class="admin-title">Manage Menu Items</h1>
+
+            <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <div class="table-responsive">
+
+                <table class="admin-table">
+                    <tr>
+                        <th>Image</th>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Availability</th>
+                        <th>Action</th>
+                    </tr>
+
+                    {% for item in items %}
+                    <tr>
+                        <td><img src="{{ item.image_url }}" alt="{{ item.name }}"></td>
+                        <td>{{ item.name }}</td>
+                        <td style="text-transform: capitalize;">{{ item.category }}</td>
+                        <td>₹{{ item.price }}</td>
+                        <td style="text-align: center;">
+                            <a href="/admin/toggle-availability/{{ item.id }}" class="switch-container"
+                                title="Toggle Availability">
+                                <span class="switch {{ 'checked' if item.is_available }}">
+                                    <span class="slider"></span>
+                                </span>
+                            </a>
+                            <div class="status-{{ 'available' if item.is_available else 'sold-out' }}"
+                                style="font-size: 11px; margin-top: 5px; font-weight: 700; text-transform: uppercase;">
+                                {{ 'Available' if item.is_available else 'Sold Out' }}
+                            </div>
+                        </td>
+                        <td class="actions">
+                            <a href="/admin/edit-item/{{ item.id }}" class="edit-btn"
+                                style="text-decoration:none; display:inline-block; padding: 6px 12px; font-size:13px; font-weight:600;">Edit</a>
+
+                            <form action="/admin/delete-item/{{ item.id }}" method="POST" style="display:inline-block;"
+                                onsubmit="return confirm('Are you sure you want to delete {{ item.name }}?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="delete-btn"
+                                    style="padding: 6px 12px; font-size:13px; font-weight:600;">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center;">No items found in the menu.</td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

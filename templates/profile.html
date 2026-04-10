@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | CampusBite</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">Campus<span>Bite</span></a>
+            
+            <!-- Mobile Menu Toggle -->
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-icon">
+                <span></span>
+            </label>
+            <div class="nav-menu">
+                <a href="/">Menu</a>
+                <a href="/orders">My Orders</a>
+                {% if user and user.role == 'admin' %}
+                <a href="/admin" style="background:#ff4757; color:white; padding:4px 10px; border-radius:6px; font-weight:600;">Admin Panel</a>
+                {% endif %}
+            </div>
+            <div class="nav-right">
+                <a href="/logout" class="btn-login">Logout</a>
+                <a href="/cart" class="cart" style="text-decoration:none;">🛒</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="profile-section">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">👤</div>
+                <h2>{{ user.name }}</h2>
+                <p class="role-badge">{{ user.role | title }}</p>
+            </div>
+            
+            <div class="profile-details">
+                <div class="detail-group">
+                    <label>Email Address</label>
+                    <p>{{ user.email }}</p>
+                </div>
+                
+                <hr>
+                
+                <div class="profile-actions">
+                    <a href="/orders" class="action-btn secondary">My Orders</a>
+                    {% if user.role == 'admin' %}
+                        <a href="/admin" class="action-btn primary">Admin Dashboard</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Orders | CampusBite</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/orders.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+<div class="nav-container">
+
+<a href="/" class="logo">Campus<span>Bite</span></a>
+
+<!-- Mobile Menu Toggle -->
+<input type="checkbox" id="nav-toggle" class="nav-toggle">
+<label for="nav-toggle" class="nav-icon">
+    <span></span>
+</label>
+
+<div class="nav-menu">
+<a href="/">Menu</a>
+<a href="/orders">My Orders</a>
+{% if user and user.role == 'admin' %}
+<a href="/admin" style="background:#ff4757; color:white; padding:4px 10px; border-radius:6px; font-weight:600;">Admin Panel</a>
+{% endif %}
+</div>
+
+<div class="nav-right">
+{% if user %}
+<a href="/logout" class="btn-login">Logout</a>
+<a href="/profile" class="profile">👤 {{ user.name }}</a>
+{% else %}
+<a href="/login" class="btn-login">Login</a>
+<a href="/register" class="btn-register">Register</a>
+{% endif %}
+<a href="/cart" class="cart" style="text-decoration:none;">🛒</a>
+</div>
+
+</div>
+</nav>
+
+
+<!-- PAGE TITLE -->
+
+<section class="orders-section">
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<h1 class="orders-title">My Orders</h1>
+
+{% if not orders %}
+<p style="text-align: center; margin-top: 2rem;">No orders yet!</p>
+{% else %}
+{% for order in orders %}
+<div class="order-card">
+<div class="order-info">
+<h3>Order #{{ order.id }}</h3>
+<p>
+    {% for oi in order.items %}
+        {{ oi.menu_item.name }} (x{{ oi.quantity }}){% if not loop.last %}, {% endif %}
+    {% endfor %}
+</p>
+<p class="payment-method">Payment: {{ order.payment_method.upper() if order.payment_method else 'N/A' }}</p>
+{% if order.schedule_time %}
+<p class="schedule-time">Scheduled for: {{ order.schedule_time }}</p>
+{% endif %}
+
+<span class="order-total">Total: ₹{{ order.total_amount }}</span>
+
+{% if order.status == 'Pending' %}
+<div class="cancel-container">
+    <a href="/cancel_order/{{ order.id }}" onclick="return confirm('Are you sure you want to cancel this order?')">
+        <button class="btn-cancel">
+            Cancel Order
+        </button>
+    </a>
+</div>
+{% endif %}
+</div>
+<div class="order-status {{ order.status.lower() }}">
+{{ order.status }}
+</div>
+</div>
+{% endfor %}
+{% endif %}
+
+</section>
+
+</body>
+</html>

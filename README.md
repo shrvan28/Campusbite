@@ -69,7 +69,6 @@ CampusBite/
 
 3. Activate Environment  
    Windows: venv\Scripts\activate  
-   Linux/Mac: source venv/bin/activate  
 
 4. Install Dependencies  
    pip install -r requirements.txt  

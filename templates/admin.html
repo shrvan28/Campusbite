@@ -1,0 +1,118 @@
+{% extends "admin_base.html" %}
+
+{% set active_page = "dashboard" %}
+{% block title %}Admin Dashboard | CampusBite{% endblock %}
+
+{% block content %}
+<h1 class="admin-title">Admin Dashboard</h1>
+
+<div class="dashboard-cards">
+    <div class="dash-card">
+        <h3>Total Orders</h3>
+        <p>{{ total_orders }}</p>
+    </div>
+    <div class="dash-card">
+        <h3>Total Items</h3>
+        <p>{{ total_items }}</p>
+    </div>
+    <div class="dash-card">
+        <h3>Active Orders</h3>
+        <p>{{ active_orders }}</p>
+    </div>
+</div>
+
+<h2 class="section-title">Orders</h2>
+<form class="admin-filter-bar" method="GET" action="/admin">
+    <div class="form-group compact">
+        <label>Status</label>
+        <select name="status">
+            <option value="">All Statuses</option>
+            {% for status in ['Pending', 'Preparing', 'Completed', 'Cancelled', 'Pending Payment'] %}
+            <option value="{{ status }}" {{ 'selected' if filters.status == status }}>{{ status }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group compact">
+        <label>Date</label>
+        <input type="date" name="date" value="{{ filters.date }}">
+    </div>
+    <div class="form-group compact">
+        <label>Payment</label>
+        <select name="payment">
+            <option value="">All Payments</option>
+            <option value="cod" {{ 'selected' if filters.payment == 'cod' }}>COD</option>
+            <option value="upi" {{ 'selected' if filters.payment == 'upi' }}>UPI</option>
+        </select>
+    </div>
+    <div class="form-group compact grow">
+        <label>Search</label>
+        <input type="search" name="q" value="{{ filters.q }}" placeholder="Customer name or order ID">
+    </div>
+    <button type="submit" class="status-btn">Apply Filters</button>
+    <a href="/admin" class="status-btn muted">Reset</a>
+</form>
+
+<div class="table-responsive">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td data-label="Order ID">#{{ order.id }}</td>
+                <td data-label="Customer">{{ order.customer.name }}</td>
+                <td data-label="Items">
+                    {% for oi in order.items %}
+                        {{ oi.menu_item.name }} (x{{ oi.quantity }}){% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td data-label="Total">&#8377;{{ "{:,.2f}".format(order.total_amount) }}</td>
+                <td data-label="Payment">
+                    {{ order.payment_method.upper() if order.payment_method else 'N/A' }}
+                    {% if order.schedule_time %}
+                    <br><small style="color: #636e72;">Pickup: {{ order.schedule_time }}</small>
+                    {% endif %}
+                </td>
+                <td data-label="Status">{{ order.status }}</td>
+                <td data-label="Action" class="actions">
+                    {% if order.status == 'Pending' %}
+                    <form action="/admin/update_order_status/{{ order.id }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="status-btn preparing" type="submit">Start Preparing</button>
+                    </form>
+                    <form action="/cancel_order/{{ order.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Cancel this order?')">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="status-btn cancel" type="submit">Cancel</button>
+                    </form>
+                    {% elif order.status == 'Preparing' %}
+                    <form action="/admin/update_order_status/{{ order.id }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="status-btn" type="submit">Mark Complete</button>
+                    </form>
+                    <form action="/cancel_order/{{ order.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Cancel this order?')">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="status-btn cancel" type="submit">Cancel</button>
+                    </form>
+                    {% elif order.status == 'Cancelled' %}
+                    <button class="status-btn cancelled" disabled>Cancelled</button>
+                    {% else %}
+                    <button class="status-btn done" disabled>Completed</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" style="text-align:center;">No orders found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

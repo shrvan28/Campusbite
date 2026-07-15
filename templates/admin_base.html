@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CampusBite Admin{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+    {% block styles %}{% endblock %}
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-layout">
+        <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
+        <label for="sidebar-toggle" class="sidebar-btn" aria-label="Toggle admin menu">
+            <span>&#9776;</span>
+        </label>
+
+        <aside class="sidebar">
+            <a href="/" class="sidebar-logo-link"><h2 class="logo">Campus<span>Bite</span></h2></a>
+            <ul>
+                <li><a href="/admin" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+                <li><a href="/admin/analytics" class="{% if active_page == 'analytics' %}active{% endif %}">Analytics</a></li>
+                <li><a href="/admin/add-item" class="{% if active_page == 'add_item' %}active{% endif %}">Add Item</a></li>
+                <li><a href="/admin/manage-items" class="{% if active_page == 'manage_items' %}active{% endif %}">Manage Menu</a></li>
+                <li><a href="/profile">My Profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

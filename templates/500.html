@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error | CampusBite</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .error-section {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .error-card h1 { font-size: 100px; color: #ff7675; margin: 0; line-height: 1; }
+        .error-card h2 { font-size: 32px; color: #2d3436; margin-bottom: 20px; }
+        .error-card p { color: #636e72; margin-bottom: 30px; font-size: 18px; }
+        .back-home {
+            background: #0984e3;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .back-home:hover { background: #0773c5; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">Campus<span>Bite</span></a>
+        </div>
+    </nav>
+
+    <section class="error-section">
+        <div class="error-card">
+            <h1>500</h1>
+            <h2>Internal Server Error</h2>
+            <p>Something went wrong on our end. Please try again later or contact support.</p>
+            <a href="/" class="back-home">Go Back Home</a>
+        </div>
+    </section>
+</body>
+</html>

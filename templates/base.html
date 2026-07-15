@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CampusBite{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block styles %}{% endblock %}
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    {% block nav %}
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">Campus<span>Bite</span></a>
+
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-icon" aria-label="Toggle navigation">
+                <span></span>
+            </label>
+
+            <div class="nav-menu">
+                <a href="/">Menu</a>
+                {% if user %}
+                <a href="/orders">My Orders</a>
+                {% endif %}
+                {% if user and user.role == 'admin' %}
+                <a href="/admin" class="admin-pill">Admin Panel</a>
+                {% endif %}
+            </div>
+
+            <div class="nav-right">
+                {% if user %}
+                <a href="/logout" class="btn-login">Logout</a>
+                <a href="/profile" class="profile">&#128100; {{ user.name }}</a>
+                {% else %}
+                <a href="/login" class="btn-login">Login</a>
+                <a href="/register" class="btn-register">Register</a>
+                {% endif %}
+                <a href="/cart" class="cart" aria-label="Cart">&#128722;{% if cart_count > 0 %}<span class="cart-count">{{ cart_count }}</span>{% endif %}</a>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% block flash_messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% endblock %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

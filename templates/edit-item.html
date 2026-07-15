@@ -1,0 +1,54 @@
+{% extends "admin_base.html" %}
+
+{% set active_page = "manage_items" %}
+{% block title %}Edit Menu Item | CampusBite Admin{% endblock %}
+
+{% block content %}
+<h1 class="admin-title">Edit Menu Item</h1>
+
+<div class="form-container">
+    <form method="POST" action="/admin/edit-item/{{ item.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" name="name" value="{{ item.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select name="category" required>
+                <option value="breakfast" {{ 'selected' if item.category == 'breakfast' }}>Breakfast & Snacks</option>
+                <option value="tea" {{ 'selected' if item.category == 'tea' }}>Tea & Coffee</option>
+                <option value="drinks" {{ 'selected' if item.category == 'drinks' }}>Cold Drinks</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Price (&#8377;)</label>
+            <input type="number" name="price" value="{{ item.price }}" required min="1" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label>Stock Quantity</label>
+            <input type="number" name="stock_quantity" value="{{ item.stock_quantity }}" required min="0" step="1">
+        </div>
+
+        <div class="form-group">
+            <label>Image URL</label>
+            <input type="url" name="image_url" value="{{ item.image_url }}" required>
+        </div>
+
+        <div class="form-group" style="display:flex; align-items:center; gap:15px;">
+            <label style="margin-bottom:0;">Is Available?</label>
+            <label class="switch">
+                <input type="checkbox" name="is_available" {{ 'checked' if item.is_available or item.is_available is none }}>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Save Changes</button>
+        <a href="/admin/manage-items" style="display:block; text-align:center; margin-top:1rem; color:#666; text-decoration:none;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

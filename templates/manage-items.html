@@ -1,0 +1,75 @@
+{% extends "admin_base.html" %}
+
+{% set active_page = "manage_items" %}
+{% block title %}Manage Menu | CampusBite Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1 class="admin-title">Manage Menu Items</h1>
+        <p class="admin-subtitle">Update item details, stock, and availability from one place.</p>
+    </div>
+    <a href="/admin/add-item" class="status-btn add-action">Add Item</a>
+</div>
+
+<div class="table-responsive">
+    <table class="admin-table manage-menu-table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Availability</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td data-label="Image">
+                    <img class="menu-thumb" src="{{ item.image_url }}" alt="{{ item.name }}">
+                </td>
+                <td data-label="Item Name">
+                    <strong class="item-name">{{ item.name }}</strong>
+                </td>
+                <td data-label="Category">
+                    <span class="category-pill">{{ item.category }}</span>
+                </td>
+                <td data-label="Price">&#8377;{{ "{:,.2f}".format(item.price) }}</td>
+                <td data-label="Stock">
+                    <span class="stock-badge {% if item.stock_quantity <= 0 %}empty{% elif item.stock_quantity <= 5 %}low{% endif %}">
+                        {{ item.stock_quantity }}
+                    </span>
+                </td>
+                <td data-label="Availability">
+                    <div class="availability-control">
+                    <form action="/admin/toggle-availability/{{ item.id }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="switch-container" title="Toggle Availability">
+                            <span class="switch {{ 'checked' if item.is_available }}"><span class="slider"></span></span>
+                        </button>
+                    </form>
+                    <span class="availability-pill {{ 'available' if item.is_available else 'sold-out' }}">
+                        {{ 'Available' if item.is_available else 'Sold Out' }}
+                    </span>
+                    </div>
+                </td>
+                <td data-label="Action" class="actions">
+                    <div class="action-group">
+                    <a href="/admin/edit-item/{{ item.id }}" class="edit-btn">Edit</a>
+                    <form action="/admin/delete-item/{{ item.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ item.name }}?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" style="text-align:center;">No items found in the menu.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

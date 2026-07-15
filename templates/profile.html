@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | CampusBite{% endblock %}
+{% block styles %}<link rel="stylesheet" href="/static/css/profile.css">{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar">&#128100;</div>
+            <h2>{{ user.name }}</h2>
+            <p class="role-badge">{{ user.role | title }}</p>
+        </div>
+
+        <div class="profile-details">
+            <div class="detail-group">
+                <label>Email Address</label>
+                <p>{{ user.email }}</p>
+            </div>
+
+            <hr>
+
+            <div class="profile-actions">
+                <a href="/orders" class="action-btn secondary">My Orders</a>
+                {% if user.role == 'admin' %}
+                <a href="/admin" class="action-btn primary">Admin Dashboard</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

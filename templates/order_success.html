@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Order Successful | CampusBite{% endblock %}
+{% block styles %}<link rel="stylesheet" href="/static/css/order_success.css">{% endblock %}
+
+{% block content %}
+<section class="success-section">
+    <div class="success-card">
+        <div class="success-icon">&#9989;</div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Your food is being prepared in the canteen.</p>
+
+        <div class="order-info">
+            <p><strong>Order ID:</strong> #{{ order_id }}</p>
+            <p><strong>Pickup Time:</strong> 10 minutes</p>
+        </div>
+
+        <a href="/" class="back-btn">Back to Menu</a>
+    </div>
+</section>
+{% endblock %}

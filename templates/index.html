@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}CampusBite | Smart Canteen{% endblock %}
+
+{% block content %}
+<header class="hero">
+    <div class="hero-text">
+        <h1>Fresh Food <span>Without Waiting</span></h1>
+        <p>Order from your college canteen in seconds and skip the queue.</p>
+
+        <div class="search-container">
+            <form action="/" method="GET">
+                <input type="text" name="q" placeholder="Search for food..." value="{{ search_query }}">
+                <button type="submit" aria-label="Search">&#128269;</button>
+            </form>
+        </div>
+
+        <a href="#menu-scroll"><button class="hero-btn">Explore Menu</button></a>
+    </div>
+</header>
+
+<section class="menu-section" id="menu-scroll">
+    <input type="radio" id="breakfast" name="tabs" checked>
+    <input type="radio" id="tea" name="tabs">
+    <input type="radio" id="drinks" name="tabs">
+
+    <div class="tabs">
+        <label for="breakfast">&#129374; Breakfast</label>
+        <label for="tea">&#9749; Tea & Coffee</label>
+        <label for="drinks">&#129380; Cold Drinks</label>
+    </div>
+
+    <div class="menu-content">
+        <div class="menu-grid breakfast">
+            {% for item in breakfast %}
+            <div class="card {% if not item.is_available or item.stock_quantity <= 0 %}sold-out{% endif %}">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p class="price">&#8377;{{ item.price }}</p>
+                {% if item.is_available and item.stock_quantity > 0 %}
+                <a href="/add_to_cart/{{ item.id }}"><button>Add to Order</button></a>
+                {% else %}
+                <button class="btn-sold-out" disabled>Sold Out</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="menu-grid tea">
+            {% for item in tea %}
+            <div class="card {% if not item.is_available or item.stock_quantity <= 0 %}sold-out{% endif %}">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p class="price">&#8377;{{ item.price }}</p>
+                {% if item.is_available and item.stock_quantity > 0 %}
+                <a href="/add_to_cart/{{ item.id }}"><button>Add to Order</button></a>
+                {% else %}
+                <button class="btn-sold-out" disabled>Sold Out</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="menu-grid drinks">
+            {% for item in drinks %}
+            <div class="card {% if not item.is_available or item.stock_quantity <= 0 %}sold-out{% endif %}">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p class="price">&#8377;{{ item.price }}</p>
+                {% if item.is_available and item.stock_quantity > 0 %}
+                <a href="/add_to_cart/{{ item.id }}"><button>Add to Order</button></a>
+                {% else %}
+                <button class="btn-sold-out" disabled>Sold Out</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+<footer>
+    <div class="footer-container">
+        <a href="/" class="footer-logo">Campus<span>Bite</span></a>
+
+        <div class="footer-info">
+            <div class="footer-info-item"><span>&#9993; admin@campusbite.com</span></div>
+            <div class="footer-info-item"><span>&#9742; +91 98765 43210</span></div>
+            <div class="footer-info-item"><span>&#128205; Campus Canteen, Block A</span></div>
+        </div>
+
+        <div class="footer-divider"></div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 CampusBite. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

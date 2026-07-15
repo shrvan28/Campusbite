@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders | CampusBite{% endblock %}
+{% block styles %}<link rel="stylesheet" href="/static/css/orders.css">{% endblock %}
+
+{% block content %}
+<section class="orders-section">
+    <h1 class="orders-title">My Orders</h1>
+
+    {% if not orders %}
+    <p style="text-align:center; margin-top:2rem;">No orders yet!</p>
+    {% else %}
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-info">
+            <h3>Order #{{ order.id }}</h3>
+            <p>
+                {% for oi in order.items %}
+                    {{ oi.menu_item.name }} (x{{ oi.quantity }}){% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <p class="payment-method">Payment: {{ order.payment_method.upper() if order.payment_method else 'N/A' }}</p>
+            <p class="schedule-time">Ordered: {{ order.created_at.strftime("%d %b %Y, %I:%M %p") }}</p>
+            {% if order.schedule_time %}
+            <p class="schedule-time">Scheduled for: {{ order.schedule_time }}</p>
+            {% endif %}
+            <span class="order-total">Total: &#8377;{{ "{:,.2f}".format(order.total_amount) }}</span>
+
+            {% if order.status == 'Pending' %}
+            <div class="cancel-container">
+                <form action="/cancel_order/{{ order.id }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn-cancel" type="submit">Cancel Order</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="order-status {{ order.status.lower().replace(' ', '-') }}">{{ order.status }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</section>
+{% endblock %}

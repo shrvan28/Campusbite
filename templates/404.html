@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | CampusBite</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .error-section {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .error-card h1 { font-size: 120px; color: #dfe6e9; margin: 0; line-height: 1; }
+        .error-card h2 { font-size: 32px; color: #2d3436; margin-bottom: 20px; }
+        .error-card p { color: #636e72; margin-bottom: 30px; font-size: 18px; }
+        .back-home {
+            background: #00b894;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .back-home:hover { background: #019874; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,184,148,0.2); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">Campus<span>Bite</span></a>
+        </div>
+    </nav>
+
+    <section class="error-section">
+        <div class="error-card">
+            <h1>404</h1>
+            <h2>Oops! Page Not Found</h2>
+            <p>The page you are looking for might have been removed or is temporarily unavailable.</p>
+            <a href="/" class="back-home">Back to Home</a>
+        </div>
+    </section>
+</body>
+</html>

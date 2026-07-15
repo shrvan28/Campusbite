@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Payment | CampusBite{% endblock %}
+{% block styles %}<link rel="stylesheet" href="/static/css/payment.css">{% endblock %}
+
+{% block content %}
+<section class="payment-section">
+    <div class="payment-card">
+        <h2>Checkout</h2>
+        <p class="subtitle">Review your payment method and confirm your order</p>
+
+        <form action="/payment" method="POST" id="payment-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="schedule_time" value="{{ schedule_time }}">
+
+            <div class="payment-options">
+                <label class="payment-option {% if preselected == 'upi' and razorpay_enabled %}selected-option{% endif %} {% if not razorpay_enabled %}disabled-option{% endif %}">
+                    <input type="radio" name="payment" value="upi" required {% if preselected == 'upi' and razorpay_enabled %}checked{% endif %} {% if not razorpay_enabled %}disabled{% endif %}>
+                    <i>&#128241;</i>
+                    <div class="option-info">
+                        <h4>UPI Payment</h4>
+                        <p>{% if razorpay_enabled %}Google Pay, PhonePe, Paytm{% else %}Online payment is not configured{% endif %}</p>
+                        {% if preselected == 'upi' and schedule_time %}
+                        <span class="schedule-badge">&#9200; Pickup at {{ schedule_time }}</span>
+                        {% endif %}
+                    </div>
+                </label>
+
+                <label class="payment-option {% if preselected == 'cod' or not razorpay_enabled %}selected-option{% endif %}">
+                    <input type="radio" name="payment" value="cod" {% if preselected == 'cod' or not razorpay_enabled %}checked{% endif %}>
+                    <i>&#128181;</i>
+                    <div class="option-info">
+                        <h4>Cash on Delivery</h4>
+                        <p>Pay when you pick up your order</p>
+                        {% if preselected == 'cod' %}
+                        <span class="schedule-badge" style="background:#fff3cd; color:#856404;">No schedule needed</span>
+                        {% endif %}
+                    </div>
+                </label>
+            </div>
+
+            <div class="order-total-box">
+                <span>Amount to Pay</span>
+                <h3>&#8377;{{ "{:,.2f}".format(total) }}</h3>
+            </div>
+
+            <button type="submit" class="pay-btn">Confirm & Place Order</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

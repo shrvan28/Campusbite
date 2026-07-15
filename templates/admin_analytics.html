@@ -1,0 +1,131 @@
+{% extends "admin_base.html" %}
+
+{% set active_page = "analytics" %}
+{% block title %}Analytics | CampusBite Admin{% endblock %}
+
+{% block styles %}
+<style>
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
+    .stat-card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .stat-card h3 { margin-bottom: 20px; color: #636e72; font-size: 18px; }
+    .revenue-value { font-size: 36px; font-weight: 700; color: #00b894; }
+    .popular-list { list-style: none; }
+    .popular-list li { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f2f6; }
+    .popular-list li:last-child { border: none; }
+    .qty-badge { background: #dfe6e9; padding: 2px 10px; border-radius: 12px; font-size: 14px; font-weight: 600; }
+    .report-toolbar { background: white; padding: 22px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 24px; display: flex; gap: 14px; align-items: end; flex-wrap: wrap; }
+    .report-toolbar label { display: block; font-weight: 700; color: #2d3436; margin-bottom: 6px; }
+    .report-toolbar input { padding: 11px 12px; border: 1px solid #dfe6e9; border-radius: 8px; font: inherit; }
+    .report-btn { border: 0; border-radius: 8px; padding: 12px 16px; background: #00b894; color: white; font-weight: 700; text-decoration: none; cursor: pointer; display: inline-block; }
+    .report-btn.secondary { background: #1e272e; }
+    .daily-grid { display: grid; grid-template-columns: repeat(4, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .mini-stat { background: white; border-radius: 10px; padding: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+    .mini-stat span { color: #636e72; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+    .mini-stat strong { display: block; margin-top: 8px; font-size: 24px; color: #1e272e; }
+    @media(max-width: 900px) { .analytics-grid, .daily-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="admin-title">Business Analytics</h1>
+
+<form class="report-toolbar" method="GET" action="/admin/analytics">
+    <div>
+        <label for="report-date">Daily Sales Date</label>
+        <input type="date" id="report-date" name="date" value="{{ report_date.isoformat() }}">
+    </div>
+    <button type="submit" class="report-btn">Check Daily Sales</button>
+    <a class="report-btn secondary" href="/admin/analytics/daily-report.pdf?date={{ report_date.isoformat() }}">Download PDF</a>
+    <a class="report-btn secondary" href="/admin/analytics/daily-report.csv?date={{ report_date.isoformat() }}">Export CSV</a>
+</form>
+
+<div class="daily-grid">
+    <div class="mini-stat"><span>Orders</span><strong>{{ daily_report.total_orders }}</strong></div>
+    <div class="mini-stat"><span>Items Sold</span><strong>{{ daily_report.total_items_sold }}</strong></div>
+    <div class="mini-stat"><span>Gross Revenue</span><strong>&#8377;{{ "{:,.2f}".format(daily_report.gross_revenue) }}</strong></div>
+    <div class="mini-stat"><span>Completed Revenue</span><strong>&#8377;{{ "{:,.2f}".format(daily_report.completed_revenue) }}</strong></div>
+</div>
+
+<h2 class="section-title">Date Wise Sales: {{ report_date.strftime("%d %b %Y") }}</h2>
+<div class="table-responsive">
+    <table class="admin-table">
+        <thead>
+            <tr><th>Item</th><th>Quantity Sold</th><th>Revenue</th></tr>
+        </thead>
+        <tbody>
+            {% for item_name, quantity, revenue in daily_report.item_sales %}
+            <tr>
+                <td data-label="Item">{{ item_name }}</td>
+                <td data-label="Quantity Sold">{{ quantity|int }}</td>
+                <td data-label="Revenue">&#8377;{{ "{:,.2f}".format(revenue or 0) }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3" style="text-align:center;">No sales found for this date.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2 class="section-title" style="margin-top: 30px;">Orders On Selected Date</h2>
+<div class="table-responsive">
+    <table class="admin-table">
+        <thead>
+            <tr><th>Order ID</th><th>Time</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for order in daily_report.orders %}
+            <tr>
+                <td data-label="Order ID">#{{ order.id }}</td>
+                <td data-label="Time">{{ order.created_at.strftime("%I:%M %p") }}</td>
+                <td data-label="Customer">{{ order.customer.name }}</td>
+                <td data-label="Total">&#8377;{{ "{:,.2f}".format(order.total_amount) }}</td>
+                <td data-label="Payment">{{ order.payment_method.upper() if order.payment_method else 'N/A' }}</td>
+                <td data-label="Status">{{ order.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center;">No orders found for this date.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="analytics-grid">
+    <div class="stat-card">
+        <h3>Total Revenue</h3>
+        <p class="revenue-value">&#8377;{{ "{:,.2f}".format(total_revenue) }}</p>
+        <p style="color: #b2bec3; margin-top: 10px;">Lifetime earnings from completed orders</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Most Popular Items</h3>
+        <ul class="popular-list">
+            {% for item_name, qty in popular_items %}
+            <li><span>{{ item_name }}</span><span class="qty-badge">{{ qty }} sold</span></li>
+            {% else %}
+            <p>No data available yet.</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<h2 class="section-title" style="margin-top: 40px;">Recent 10 Orders</h2>
+<div class="table-responsive">
+    <table class="admin-table">
+        <thead>
+            <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for order in recent_orders %}
+            <tr>
+                <td data-label="Order ID">#{{ order.id }}</td>
+                <td data-label="Customer">{{ order.customer.name }}</td>
+                <td data-label="Total">&#8377;{{ "{:,.2f}".format(order.total_amount) }}</td>
+                <td data-label="Status">{{ order.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" style="text-align:center;">No recent orders.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

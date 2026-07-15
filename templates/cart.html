@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Cart | CampusBite{% endblock %}
+{% block styles %}<link rel="stylesheet" href="/static/css/cart.css">{% endblock %}
+
+{% block content %}
+<input type="checkbox" id="modal-toggle">
+
+<section class="cart-section">
+    <h2>Your Order</h2>
+
+    <div class="cart-container">
+        <div class="cart-items">
+            {% if not items %}
+            <div style="text-align:center; padding: 40px 0;">
+                <p style="margin-bottom: 20px; font-size: 18px; color: #636e72;">Your cart is empty.</p>
+                <a href="/" class="checkout-btn" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 30px;">Start Ordering</a>
+            </div>
+            {% else %}
+            {% for item in items %}
+            <div class="cart-item">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <div class="item-details">
+                    <h3>{{ item.name }}</h3>
+                    <p>&#8377;{{ item.price }}</p>
+                </div>
+                <div class="quantity">
+                    <a href="/update_cart/{{ item.id }}/minus" class="qty-btn" aria-label="Decrease quantity">-</a>
+                    <span>{{ item.quantity }}</span>
+                    <a href="/update_cart/{{ item.id }}/plus" class="qty-btn" aria-label="Increase quantity">+</a>
+                </div>
+                <a href="/update_cart/{{ item.id }}/remove" class="remove-btn" aria-label="Remove item">&#128465;</a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-row">
+                <span>Total</span>
+                <span>&#8377;{{ total }}</span>
+            </div>
+
+            {% if items %}
+            <label for="modal-toggle" class="checkout-btn" style="display:block; text-align:center;">Proceed to Payment</label>
+            <a href="/clear_cart" style="display:block; text-align:center; margin-top:10px; color:red; text-decoration:none;">Clear Cart</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div class="modal-overlay">
+    <div class="modal-card">
+        <form method="GET" action="/payment" id="checkout-form">
+            <h3>Checkout</h3>
+            <p>Choose how you'd like to pay for your order.</p>
+
+            <div class="modal-payment-options">
+                <label class="modal-pay-option" id="label-upi">
+                    <input type="radio" name="payment" value="upi" id="pay-upi" onchange="handlePaymentChange()" required {% if not razorpay_enabled %}disabled{% endif %}>
+                    <span class="pay-icon">&#128241;</span>
+                    <div>
+                        <strong>UPI / Online</strong>
+                        <small>{% if razorpay_enabled %}Google Pay, PhonePe, Paytm{% else %}Not configured yet{% endif %}</small>
+                    </div>
+                </label>
+
+                <label class="modal-pay-option" id="label-cod">
+                    <input type="radio" name="payment" value="cod" id="pay-cod" onchange="handlePaymentChange()" {% if not razorpay_enabled %}checked{% endif %}>
+                    <span class="pay-icon">&#128181;</span>
+                    <div>
+                        <strong>Cash on Delivery</strong>
+                        <small>Pay when you pick up</small>
+                    </div>
+                </label>
+            </div>
+
+            <div class="time-input-group" id="schedule-section" style="display:none;">
+                <label for="order-time">&#9200; Schedule Pickup Time <small style="color:#00b894;">(UPI only)</small></label>
+                <input type="time" id="order-time" name="order-time" step="600" value="12:00" class="time-input">
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn confirm-order-btn">Confirm & Pay</button>
+                <label for="modal-toggle" class="btn cancel-modal-btn">Cancel</label>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function handlePaymentChange() {
+    var upi = document.getElementById('pay-upi');
+    var cod = document.getElementById('pay-cod');
+    var scheduleSection = document.getElementById('schedule-section');
+    var timeInput = document.getElementById('order-time');
+    var labelUpi = document.getElementById('label-upi');
+    var labelCod = document.getElementById('label-cod');
+
+    if (upi && upi.checked) {
+        scheduleSection.style.display = 'block';
+        timeInput.required = true;
+        labelUpi.classList.add('selected');
+        labelCod.classList.remove('selected');
+    } else if (cod && cod.checked) {
+        scheduleSection.style.display = 'none';
+        timeInput.required = false;
+        timeInput.value = '';
+        labelCod.classList.add('selected');
+        labelUpi.classList.remove('selected');
+    }
+}
+</script>
+{% endblock %}
